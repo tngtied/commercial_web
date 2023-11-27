@@ -1,0 +1,252 @@
+
+.description{
+
+    position: absolute;
+
+    display: none;
+    
+
+    z-index: 2;
+    background-color: black;
+    color: white;
+    /* transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%); */
+}
+.reviewtext{
+
+    display: block;
+    word-wrap: break-word;
+    margin-left: auto;
+    margin-right:auto;
+
+}
+
+body {
+    font-family: 'Hahmlet', serif;
+}
+form{
+    padding: 0.1em;;
+    border: 0.5em groove cornsilk;
+}
+
+h3{
+    margin-left: auto; margin-right: auto; 
+}
+.hovro{
+    padding-top: 14px;
+    width: 300px;
+    height: 300px;
+    transition:2s transform;
+}
+/* .hovro:hover{
+    transform: rotate(360deg)
+} */
+.bigger{
+    padding-top: 14px;
+    width: 300px;
+    height: 300px;
+    transition:2s transform;
+}
+/* .bigger:hover{
+    transform: scale(1.1);
+} */
+.review{
+    text-align: left;
+    border: 1px solid black;
+    list-style-type : none;
+    width: 500px;
+    align-self: center;
+    margin-left:auto;
+    margin-right:auto;
+    word-wrap: break-word
+
+}
+.selling{
+    display: flex;
+    margin-left:auto;
+    margin-right:auto;
+    border: 1px solid black;
+    width: 330px;
+    height: 330px;
+
+    text-align: center;
+    list-style-type : none;
+    align-self: center;
+    display: inline-block;
+
+}
+p{
+    font-size: 15px;
+    padding: auto;
+}
+a{
+    text-align: center;
+    float: left;
+    margin: 10px;
+    padding: auto;
+}
+button{
+    background-color: bisque;
+    font-size: 15px;
+}
+
+input[type=submit]{
+    color:black;
+    font-size: 15px;
+    margin: 10px;
+    height: 30px;
+}
+input[name=age]{
+    width: 40px;
+}
+input[type=reset]{
+    color:violet;
+    font-size: 15px;
+    margin:10px;
+    height: 30px;
+}
+header{
+    animation-name: movingheader;
+    animation-duration: 2s;
+    padding: auto;
+    margin-left:auto;
+    margin-right:auto;
+    text-align: center;
+    height: 50px;
+
+    white-space: nowrap;
+}
+
+@keyframes movingheader {
+    from {
+        width: 250%;
+    }
+    to {
+        width: 100%;
+    }
+  }
+
+.navitem {
+    align-items: center;
+    justify-content: center;
+    list-style-type : none;
+    text-align: center;
+}
+.navul{
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    text-align: center;
+}
+ul{
+    
+    margin-left:auto;
+    margin-right:auto;
+    text-align: center;
+
+    
+}
+
+.column{
+    display: inline;
+    flex-direction: row;
+}
+.row{
+    display: flex;
+    flex-direction: column;
+    margin:auto;
+}
+.paragraph{
+    text-align: center;
+}
+.paragraph p{
+    text-align: center;
+}
+#main {
+display: flex;
+flex-direction: column;
+flex: 1;
+}
+@media (max-width: 480px) {
+    .navitem {
+        flex: 100%;
+        
+        text-align: center;
+
+    }
+    .navul{
+        flex-wrap: nowrap;
+        flex-direction: column;
+    }
+
+    header {
+        text-align: center;
+    }
+    .row{
+        flex: 100%;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: column;
+        margin:auto;
+    }
+
+    .column{
+        flex: 100%;
+        flex-wrap: wrap;
+        max-width: 100%;
+        flex-direction: column;
+    }
+    .selling img {
+        flex-direction: column;
+        max-width: 100%;
+        flex-wrap: wrap;
+        object-fit: cover;
+        max-height: 100%;
+    }
+  }
+  @media (min-width: 481px) and (max-width: 800px) {
+    .navitem {
+        flex: 100%;
+        text-align: center;
+
+    }
+    .navul{
+        flex-wrap: nowrap;
+        flex-direction: column;
+    }
+
+    header {
+        text-align: center;
+    }
+    .row{
+        
+        flex: 100%;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: column;
+        margin:auto;
+    }
+    .column{
+        padding:auto;
+        margin:auto;
+        flex-direction: column;
+    }
+    .selling{
+        width:80%;
+        height: 80%;
+        padding-top:3%;
+
+    }
+    .bigger{
+        width:90%;
+        height:90%;
+        padding-top:0%;
+    }
+    .hovro{
+        width:90%;
+        height: 90%;
+        padding-top:0%;
+    }
+  }

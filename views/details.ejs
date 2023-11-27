@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8">
+        <title>E-commerce main page</title>
+        <link rel="stylesheet" type="text/css" href="/public/main.css"><link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@300&display=swap" rel="stylesheet">  
+        <script>
+
+        </script> 
+    </head>
+    <body>
+        <header>
+            <h1>E-Commerce main page</h1>
+        </header>
+        <div id="main">
+
+
+            <ul class="navul">
+                <li class="navitem"><a href="/public/signup.html">
+                    <button>회원가입</button>
+                </a></li>
+                <li class="navitem"><a href="/public/login.html">
+                    <button>로그인</button>
+                </a></li>
+                <li class="navitem"><a href="/">
+                    <button>상품 리스트로</button>
+                </a></li>
+            </ul>
+
+
+            <h3>상세 페이지</h3>
+            <h4 style="text-align:center;"> 상세 페이지입니다 </h4>
+
+
+            <div class="row" id="table"> 
+                <%- contents %>
+            </div>
+            
+            <div style="text-align:center;">
+                <%- reviewplace %>
+            </div>
+
+            <div id="comments">
+                <%- commentplace %>
+            </div>
+
+
+            <div class="paragraph">
+                <h4>
+                    E-commerce website 소개
+                </h4>
+                <p>
+                    주로 보석을 사용하는 귀금속 공예 및 악세서리를 판매하는 웹사이트입니다.
+                </p>
+            </div>
+
+
+         </div>
+
+         <script>
+              
+
+
+         </script>
+    </body>
+</html>
