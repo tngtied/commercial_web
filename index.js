@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
+const SqliteToJson = require('sqlite-to-json');
 const { type } = require("express/lib/response");
 
 async function getDBConnection(){
@@ -14,35 +15,11 @@ async function getDBConnection(){
     return db;
 }
 
-function makeProductList(productlist){
-    var items = '';
-        var flag = true;
-            for (const [dex, product] of Object.entries(productlist)){
-                // //console.log(product);
-                if (flag){
-                    items += '<ul class="column"><li class="selling"><img class="hover" value="'+product.product_id+'" onclick="location.href=(\'/product/'+product.product_id+'\')" src="/public/images/';
-                    items += product.product_image;
-                    items += '"></img>';
-                    items+='</li>';
-                    flag=false;
-                }else{
-
-                    //items += `<li class="selling"><img class="bigger" src="${value2['img']}"></img></li></ul><br>`;
-                    items += '<li class="selling"> <img class="bigger" value="'+product.product_id+'" onclick="location.href=(\'/product/'+product.product_id+'\')" src="/public/images/';
-                    items += product.product_image;
-                    items += '"></img>';
-                    items+='</li></ul><br>';
-                    flag=true;
-                }
-        }      
-        return items;
-        ////console.log(table);      
-}
 
 function makeProductdetail(productinp){
     var items = '';
     for (const [dex, product] of Object.entries(productinp)){
-        items += '<ul class="column"><li  class="selling"><img class="hover" " src="/public/images/';
+        items += '<ul class="row"><li  class="selling"><img class="hover" " src="/public/images/';
         items += product.product_image;
         items += '"></img>';
         items+='</li>';
@@ -61,18 +38,32 @@ app.use("/",express.static("public/"));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+const exporter = new SqliteToJson({
+    client: new sqlite3.Database('./test.db')
+  });
 
-
+app.get("/product_list", async function(req, res){
+    console.log("getting product list from server-side");
+    // let db = await getDBConnection();
+    // let data = await db.all('SELECT * FROM product');
+    // const jsonData = data.json()
+    // console.log("type of data: " + typeof data);
+    // await db.close();
+    exporter.all(function (err, all){ 
+        console.log("data is: ", all);
+        res.json(all);
+    });    
+});
 
 app.get("/", async function (req,res){
     // console.log("11111");
-    let db = await getDBConnection();
-    let rows = await db.all('SELECT * FROM product');
-    await db.close();
-    // console.log(rows);
-    var contenthtml = makeProductList(rows);
-    // console.log(contenthtml);
-    res.render('index', {contents : contenthtml, state: ""});
+    // let db = await getDBConnection();
+    // let rows = await db.all('SELECT * FROM product');
+    // await db.close();
+    // // console.log(rows);
+    // var contenthtml = main_function.makeProductList(rows);
+    // // console.log(contenthtml);
+    res.render('index', {'state' : ''});
 });
 
 function makeReviewForm(product_id){
