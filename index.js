@@ -20,7 +20,7 @@ function makeProductList(productlist){
             for (const [dex, product] of Object.entries(productlist)){
                 // //console.log(product);
                 if (flag){
-                    items += '<ul class="column"><li class="selling"><img class="hovro" value="'+product.product_id+'" onclick="location.href=(\'/product/'+product.product_id+'\')" src="';
+                    items += '<ul class="column"><li class="selling"><img class="hover" value="'+product.product_id+'" onclick="location.href=(\'/product/'+product.product_id+'\')" src="/public/images/';
                     items += product.product_image;
                     items += '"></img>';
                     items+='</li>';
@@ -28,7 +28,7 @@ function makeProductList(productlist){
                 }else{
 
                     //items += `<li class="selling"><img class="bigger" src="${value2['img']}"></img></li></ul><br>`;
-                    items += '<li class="selling"> <img class="bigger" value="'+product.product_id+'" onclick="location.href=(\'/product/'+product.product_id+'\')" src="';
+                    items += '<li class="selling"> <img class="bigger" value="'+product.product_id+'" onclick="location.href=(\'/product/'+product.product_id+'\')" src="/public/images/';
                     items += product.product_image;
                     items += '"></img>';
                     items+='</li></ul><br>';
@@ -42,7 +42,7 @@ function makeProductList(productlist){
 function makeProductdetail(productinp){
     var items = '';
     for (const [dex, product] of Object.entries(productinp)){
-        items += '<ul class="column"><li  class="selling"><img class="hovro" " src="/public/';
+        items += '<ul class="column"><li  class="selling"><img class="hover" " src="/public/images/';
         items += product.product_image;
         items += '"></img>';
         items+='</li>';
@@ -143,16 +143,8 @@ app.post("/product/:product_id", async function (req,res){
     }else{
         commentjson[productid] = [req.body.updatecommentvalue];
     }
-    //console.log(commentjson);
-
     var reviewhtml = makeReviewForm(req.params.product_id);
 
-    // if (comment){
-    //     commenthtml+=makeComment(comment)
-    // }else{
-    //     commentJSON
-        
-    // }
 
 
     fs.writeFileSync(`public/comment.json`, JSON.stringify(commentjson), function writeJSON(err, val){
@@ -193,8 +185,8 @@ app.get("/product/:product_id", async function (req, res) {
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
-    //console.log("서버가 실행됐습니다.");
-    //console.log(`서버주소: http://localhost:${PORT}`);
+    console.log("서버가 실행됐습니다.");
+    console.log(`서버주소: http://localhost:${PORT}`);
 });
 
 // app.post("/write-file", function(req, res){

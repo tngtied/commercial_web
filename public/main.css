@@ -32,13 +32,13 @@ form{
 h3{
     margin-left: auto; margin-right: auto; 
 }
-.hovro{
+.hover{
     padding-top: 14px;
     width: 300px;
     height: 300px;
     transition:2s transform;
 }
-/* .hovro:hover{
+/* .hover:hover{
     transform: rotate(360deg)
 } */
 .bigger{
@@ -244,7 +244,7 @@ flex: 1;
         height:90%;
         padding-top:0%;
     }
-    .hovro{
+    .hover{
         width:90%;
         height: 90%;
         padding-top:0%;
