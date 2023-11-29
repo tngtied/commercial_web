@@ -49,10 +49,15 @@ app.get("/product_list", async function(req, res){
     // const jsonData = data.json()
     // console.log("type of data: " + typeof data);
     // await db.close();
-    exporter.all(function (err, all){ 
-        console.log("data is: ", all);
+    // exporter.all(function (err, all){ 
+    //     console.log("data is: ", all);
+    //     res.json(all);
+    // });    
+    exporter.all(function (err, all){
+        // console.log("data is: ", all);
         res.json(all);
-    });    
+    });
+
 });
 
 app.get("/", async function (req,res){
