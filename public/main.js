@@ -1,13 +1,22 @@
-async function makeProductList(){
-    const res = await fetch("http://localhost:8000/product_list"); 
+console.log("main.js running...");
 
-    console.log(res);
-    
-    const product_data = res
+fetch("http://localhost:8000/product_list")
+    .then((res) => res.json())
+    .then((data) => { 
+        make_product_list(JSON.parse(data));
+    })
+    .catch((err) => console.log("err: ", err));
+
+function make_product_list(product_data){
+    console.log("input product_data: ", product_data);
+
+
     var ProductList = document.createElement("div");
     var flag = true;
-    for (const [dex, product] of Object.entries(product_data)){
-        console.log(product);
+    
+    for (const i in product_data){
+        const product = product_data[i];
+        // console.log(product_data[i]);
         if (flag){
             var ul_obj = document.createElement("ul");
             ul_obj.classList.add("row");
@@ -26,18 +35,14 @@ async function makeProductList(){
         ul_obj.appendChild(li_obj);
 
         if (flag){
-            flag = False;
+            flag = false;
         }else{
             ProductList.appendChild(ul_obj);
             ProductList.appendChild(document.createElement("br"));
-            flag = True
+            flag = true;
         }
     }      
-    document.getElementById("table").appendChild(product_list);
-    
+    document.getElementById("table").appendChild(ProductList);
 }
-window.addEventListener('load', makeProductList, false);
+
 console.log("main.js running...");
-
-
-

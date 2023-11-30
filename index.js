@@ -37,27 +37,24 @@ app.use("/public",express.static("public/"));
 app.use("/",express.static("public/"));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
+    
 const exporter = new SqliteToJson({
     client: new sqlite3.Database('./test.db')
   });
 
 app.get("/product_list", async function(req, res){
     console.log("getting product list from server-side");
-    // let db = await getDBConnection();
-    // let data = await db.all('SELECT * FROM product');
+    let db = await getDBConnection();
+    let data = await db.all('SELECT * FROM product');
     // const jsonData = data.json()
     // console.log("type of data: " + typeof data);
-    // await db.close();
+    await db.close();
     // exporter.all(function (err, all){ 
     //     console.log("data is: ", all);
     //     res.json(all);
     // });    
-    exporter.all(function (err, all){
-        // console.log("data is: ", all);
-        res.json(all);
-    });
-
+    // console.log(data);
+    res.json(JSON.stringify(data));
 });
 
 app.get("/", async function (req,res){
