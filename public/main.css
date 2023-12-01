@@ -149,11 +149,11 @@ ul{
     
 }
 
-.column{
+.row{
     display: inline;
     flex-direction: row;
 }
-.row{
+.column{
     display: flex;
     flex-direction: column;
     margin:auto;

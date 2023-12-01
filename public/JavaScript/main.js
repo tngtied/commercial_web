@@ -28,7 +28,10 @@ function make_product_list(product_data){
         var img_obj = document.createElement("img");
         img_obj.classList.add("bigger");
         img_obj.value = product.product_id;
-        img_obj.onclick = "location.href=(\'/product/'+product.product_id+'\')";
+        img_obj.onclick = function (){
+            location.href = "/product/" + product.product_id;
+        }
+        // "location.href=(\'/product/'+product.product_id+'\')";
         img_obj.src = "/public/images/" + product.product_image;
 
         li_obj.appendChild(img_obj);

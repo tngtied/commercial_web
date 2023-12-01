@@ -16,19 +16,6 @@ async function getDBConnection(){
 }
 
 
-function makeProductdetail(productinp){
-    var items = '';
-    for (const [dex, product] of Object.entries(productinp)){
-        items += '<ul class="row"><li  class="selling"><img class="hover" " src="/public/images/';
-        items += product.product_image;
-        items += '"></img>';
-        items+='</li>';
-        items += '<li style="list-style-type : none;">';
-        items+='<div  id="'+product.product_id+'">카테고리: '+product.product_category+'<br>제품 아이디: '+product.product_id+'<br>제품명: '+product.product_title+'<br>가격: '+product.product_price+'</div>';
-        items+='</li></ul><br>';
-    }
-    return items;
-}
 
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
@@ -38,43 +25,24 @@ app.use("/",express.static("public/"));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
     
-const exporter = new SqliteToJson({
-    client: new sqlite3.Database('./test.db')
-  });
-
 app.get("/product_list", async function(req, res){
     console.log("getting product list from server-side");
     let db = await getDBConnection();
     let data = await db.all('SELECT * FROM product');
-    // const jsonData = data.json()
-    // console.log("type of data: " + typeof data);
     await db.close();
-    // exporter.all(function (err, all){ 
-    //     console.log("data is: ", all);
-    //     res.json(all);
-    // });    
-    // console.log(data);
     res.json(JSON.stringify(data));
 });
 
 app.get("/", async function (req,res){
-    // console.log("11111");
-    // let db = await getDBConnection();
-    // let rows = await db.all('SELECT * FROM product');
-    // await db.close();
-    // // console.log(rows);
-    // var contenthtml = main_function.makeProductList(rows);
-    // // console.log(contenthtml);
     res.render('index', {'state' : ''});
 });
 
-function makeReviewForm(product_id){
-    let ret = '<form style="display: inline-block;" name = "search" method="POST" action="/product/'+product_id+'">';
-    ret+= '<label for="comment">리뷰 작성하기: </label>';
-    ret+='<textarea type="input" name="updatecommentvalue" style="width: 500px; display:inline-block;" placeholder="리뷰를 작성하세요"> </textarea>'
-    ret+='<input class="navitem" type="submit"> </form>'
-    return ret;
-}
+app.get("/reviews/:product_id", async function (req,res){
+    const reviewJson = JSON.parse(fs.readFileSync(`public/comment.json`) )[req.params.product_id];
+
+    res.json(JSON.stringify(reviewJson));
+});
+
 
 app.post("/searched", async function (req,res){
     let db = await getDBConnection();
@@ -100,52 +68,29 @@ app.post("/searched", async function (req,res){
     res.render('index', {contents : contenthtml, state: '카테고리 '+category+', 키워드 "'+targetword+'"로 검색하는 중입니다'});
 });
 
-function makeComment(inputval){
-    var items = '';
-    //console.log(inputval);
-    var i =1;
-    for (const [dex, comment] of Object.entries(inputval)){
-        items += '<ul class="review"><li class="reviewtext">'+i+'번째 리뷰: ';
-        //console.log(comment);
-        items += comment;
-        items+='</li></ul>';
-        i+=1;
-    }
-    return items;
-}
 
-const commentjson = JSON.parse(fs.readFileSync(`public/comment.json`) );
-//console.log("commentjson "+typeof(commentjson));
 
-// require( './comment.json');
+
 
 app.post("/product/:product_id", async function (req,res){
+    const commentjson = JSON.parse(fs.readFileSync(`public/comment.json`) );
+
     let db = await getDBConnection();
-    //console.log(req.params.product_id);
     let productid =  req.params.product_id;
     let rows = await db.all('SELECT * FROM product WHERE product_id='+productid);
     await db.close();
     var contenthtml = makeProductdetail(rows);
 
-
-
-    //console.log(commentjson);
-    //console.log(productid);
     if (commentjson.hasOwnProperty(productid) ){
-        commentjson[productid].push(req.body.updatecommentvalue);
+        commentjson[productid].push(req.body.update_comment_value);
     }else{
-        commentjson[productid] = [req.body.updatecommentvalue];
+        commentjson[productid] = [req.body.update_comment_value];
     }
     var reviewhtml = makeReviewForm(req.params.product_id);
 
 
 
-    fs.writeFileSync(`public/comment.json`, JSON.stringify(commentjson), function writeJSON(err, val){
-        if (err){
-            return //console.log(err);
-        }
-        // //console.log('writing to ' + fileName);
-    });
+    fs.writeFileSync(`public/comment.json`, JSON.stringify(commentjson), function writeJSON(err, val){ });
     var comment = commentjson[productid];
     let commentshtml = makeComment(comment);
 
@@ -153,26 +98,26 @@ app.post("/product/:product_id", async function (req,res){
 
 });
 
-
-app.get("/product/:product_id", async function (req, res) {
+app.get("/product_info/:product_id", async function (req, res) {
     let db = await getDBConnection();
     let productidvar = req.params.product_id;
     //console.log(productidvar);
-    let rows = await db.all('SELECT * FROM product WHERE product_id='+req.params.product_id);
+    let data = await db.all('SELECT * FROM product WHERE product_id='+req.params.product_id);
     await db.close();
+    res.json(JSON.stringify(data));
+});
 
 
-    var contenthtml = makeProductdetail(rows);
-    var comment = commentjson[productidvar];
-    var commentshtml  = '';
-    var reviewhtml = makeReviewForm(req.params.product_id);
-    if (comment){
-        commentshtml+=makeComment(comment)
-    }else{
-        commentshtml+='<ul class="review"><li>리뷰가 없습니다</li></ul>'
+app.get("/product/:product_id", async function (req, res) {
 
-    }
-    res.render('details', {contents : contenthtml, commentplace: commentshtml, reviewplace: reviewhtml });
+    
+
+    // var comment = commentjson[productidvar];
+    // var commentshtml  = '';
+    // var reviewhtml = makeReviewForm(req.params.product_id);
+
+    //contents : contenthtml, commentplace: commentshtml, reviewplace: reviewhtml
+    res.render('details', {});
 });
 
 const PORT = process.env.PORT || 8000;
@@ -181,12 +126,3 @@ app.listen(PORT, () => {
     console.log("서버가 실행됐습니다.");
     console.log(`서버주소: http://localhost:${PORT}`);
 });
-
-// app.post("/write-file", function(req, res){
-//     //console.log(req.body);
-//     if (!req.body?.content){
-//         res.status(400).send("400 에러! content가 post body에 없습니다.");
-//         return;
-//     }
-
-// });
