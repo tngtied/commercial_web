@@ -6,7 +6,7 @@
         <link rel="stylesheet" type="text/css" href="main.css"><link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@300&display=swap" rel="stylesheet">  
-        <script src="../public/JavaScript/main.js"></script> 
+        <script src="../public/JavaScript/search.js"></script> 
     </head>
     <body>
         <header>
@@ -29,7 +29,9 @@
 
 
             <h3>판매 물품들</h3>
-            <h4 id="currentstate" style="text-align:center;"> <%- state %> </h4>
+            <h4 id="currentstate" style="text-align:center;"> 
+                카테고리 <span id = "category"><%-category%></span>, 키워드 <span id = "keyword"><%-keyword%></span>로 검색하는 중입니다.          
+            </h4>
 
             <div style="text-align:center;">
                 <form style="display: inline-block;" name = "search" method="POST" action="/searched">
@@ -47,8 +49,17 @@
                 </form>
             </div>
 
-            <div class="column" id="table"> 
+
+
+
+            <div class="row" id="table"> 
+                <%- contents %>
             </div>
+
+
+
+            
+
 
             <div class="paragraph">
                 <h4>
@@ -61,5 +72,11 @@
 
 
          </div>
+
+         <script>
+              
+
+
+         </script>
     </body>
 </html>

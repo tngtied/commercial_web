@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const app = express();
 const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
-const SqliteToJson = require('sqlite-to-json');
 const { type } = require("express/lib/response");
 
 async function getDBConnection(){
@@ -15,10 +14,7 @@ async function getDBConnection(){
     return db;
 }
 
-
-
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use("/public",express.static("public/"));
 app.use("/",express.static("public/"));
@@ -43,33 +39,36 @@ app.get("/reviews/:product_id", async function (req,res){
     res.json(JSON.stringify(reviewJson));
 });
 
+app.post("/search",  async function (req,res){
 
-app.post("/searched", async function (req,res){
     let db = await getDBConnection();
-    // console.log("여기까지 왔어요!");
-    // console.log(req.body.categories+" "+req.body.keyword)
-    let category = req.body.categories;
-    let targetword= req.body.keyword;
-    var querysent = 'SELECT * FROM product WHERE true';
-    if (category){
-        if (category!='all'){
-            querysent+= ' AND product_category="'+category+'"';
-        }
-    }else{
-        category='모두 보기';
+    let category = req.body.category;
+    let keyword= req.body.keyword;
+    console.log("post search with conditions category: " + category + ", keyword: " + keyword);
+
+    var query = 'SELECT * FROM product WHERE true';
+    if (category && category!='all'){
+            query += ' AND product_category="'+category+'"';
     }
-    if (targetword){
-        querysent+= ` AND product_title LIKE '%`+targetword+`%'`;
+    if (keyword){
+        query += ` AND product_title LIKE '%`+keyword+`%'`;
     }
-    // //console.log(querysent);
-    let rows = await db.all(querysent);
+
+    let rows = await db.all(query);
     await db.close();
-    var contenthtml = makeProductList(rows);
-    res.render('index', {contents : contenthtml, state: '카테고리 '+category+', 키워드 "'+targetword+'"로 검색하는 중입니다'});
+    res.json(JSON.stringify(rows))
 });
 
+app.post("/searched", async function (req,res){
+    let category = req.body.categories;
+    let keyword= req.body.keyword;
 
-
+    if (! category){
+        category='모두 보기';
+    }
+    
+    res.render('search', {contents : '', category: category, keyword: keyword});
+});
 
 
 app.post("/product/:product_id", async function (req,res){
@@ -89,7 +88,6 @@ app.post("/product/:product_id", async function (req,res){
     var reviewhtml = makeReviewForm(req.params.product_id);
 
 
-
     fs.writeFileSync(`public/comment.json`, JSON.stringify(commentjson), function writeJSON(err, val){ });
     var comment = commentjson[productid];
     let commentshtml = makeComment(comment);
@@ -100,8 +98,6 @@ app.post("/product/:product_id", async function (req,res){
 
 app.get("/product_info/:product_id", async function (req, res) {
     let db = await getDBConnection();
-    let productidvar = req.params.product_id;
-    //console.log(productidvar);
     let data = await db.all('SELECT * FROM product WHERE product_id='+req.params.product_id);
     await db.close();
     res.json(JSON.stringify(data));
@@ -109,14 +105,6 @@ app.get("/product_info/:product_id", async function (req, res) {
 
 
 app.get("/product/:product_id", async function (req, res) {
-
-    
-
-    // var comment = commentjson[productidvar];
-    // var commentshtml  = '';
-    // var reviewhtml = makeReviewForm(req.params.product_id);
-
-    //contents : contenthtml, commentplace: commentshtml, reviewplace: reviewhtml
     res.render('details', {});
 });
 
