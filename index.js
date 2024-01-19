@@ -15,10 +15,7 @@ async function getDBConnection(){
     return db;
 }
 
-
-
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use("/public",express.static("public/"));
 app.use("/",express.static("public/"));
@@ -46,8 +43,6 @@ app.get("/reviews/:product_id", async function (req,res){
 
 app.post("/searched", async function (req,res){
     let db = await getDBConnection();
-    // console.log("여기까지 왔어요!");
-    // console.log(req.body.categories+" "+req.body.keyword)
     let category = req.body.categories;
     let targetword= req.body.keyword;
     var querysent = 'SELECT * FROM product WHERE true';
@@ -61,7 +56,6 @@ app.post("/searched", async function (req,res){
     if (targetword){
         querysent+= ` AND product_title LIKE '%`+targetword+`%'`;
     }
-    // //console.log(querysent);
     let rows = await db.all(querysent);
     await db.close();
     var contenthtml = makeProductList(rows);
@@ -101,7 +95,6 @@ app.post("/product/:product_id", async function (req,res){
 app.get("/product_info/:product_id", async function (req, res) {
     let db = await getDBConnection();
     let productidvar = req.params.product_id;
-    //console.log(productidvar);
     let data = await db.all('SELECT * FROM product WHERE product_id='+req.params.product_id);
     await db.close();
     res.json(JSON.stringify(data));
@@ -109,14 +102,6 @@ app.get("/product_info/:product_id", async function (req, res) {
 
 
 app.get("/product/:product_id", async function (req, res) {
-
-    
-
-    // var comment = commentjson[productidvar];
-    // var commentshtml  = '';
-    // var reviewhtml = makeReviewForm(req.params.product_id);
-
-    //contents : contenthtml, commentplace: commentshtml, reviewplace: reviewhtml
     res.render('details', {});
 });
 
